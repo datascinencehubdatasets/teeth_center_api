@@ -1,10 +1,12 @@
-FROM python:3.13.3-slim
+# Надежная версия Python (рекомендуется 3.12, не 3.13!)
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y build-essential
 
 WORKDIR /app
 
 COPY requirements.txt .
+
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY ./app ./app
