@@ -20,7 +20,7 @@ class PatientCreateRequest(BaseModel):
     phone: str
     fname: str
     doctor_id: int
-    lname: Optional[str] = ""
+    lname: Optional[str] = "-"
 
 @router.post("/find-or-create-patient")
 def find_or_create_patient(request: PatientCreateRequest):
