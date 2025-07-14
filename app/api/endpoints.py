@@ -66,7 +66,19 @@ def create_visit(request: VisitCreateRequest):
         if not doctor.branches:
             raise HTTPException(
                 status_code=400, detail="У доктора нет филиалов")
-        branch_id = doctor.branches[0]["id"]
+
+        print('doctor: ', doctor)
+        # Check if branch 7876 exists in doctor's branches
+        TARGET_BRANCH_ID = 7876
+        TARGET_BRANCH_ADDRESS = "Жк Шахристан, Навои 208/1"
+
+        if not any(branch["id"] == TARGET_BRANCH_ID for branch in doctor.branches):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Врач не привязан к филиалу '{TARGET_BRANCH_ADDRESS}'"
+            )
+
+        branch_id = TARGET_BRANCH_ID
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 404:
             raise HTTPException(
