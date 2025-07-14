@@ -54,6 +54,7 @@ def find_or_create_patient(request: PatientCreateRequest):
 class VisitCreateRequest(BaseModel):
     patient_id: int
     doctor_id: int
+    branch_id: int
     start: str
     end: str
     description: Optional[str] = ""
@@ -67,15 +68,12 @@ def create_visit(request: VisitCreateRequest):
             raise HTTPException(
                 status_code=400, detail="У доктора нет филиалов")
 
-        print('doctor: ', doctor)
-        # Check if branch 7876 exists in doctor's branches
-        TARGET_BRANCH_ID = 7876
-        TARGET_BRANCH_ADDRESS = "Жк Шахристан, Навои 208/1"
+        TARGET_BRANCH_ID = request.branch_id
 
         if not any(branch["id"] == TARGET_BRANCH_ID for branch in doctor.branches):
             raise HTTPException(
                 status_code=400,
-                detail=f"Врач не привязан к филиалу '{TARGET_BRANCH_ADDRESS}'"
+                detail=f"Врач не привязан к филиалу '{request.branch_id}'"
             )
 
         branch_id = TARGET_BRANCH_ID
