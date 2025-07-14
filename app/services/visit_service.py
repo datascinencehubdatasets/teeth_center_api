@@ -18,12 +18,12 @@ class VisitService:
         visit_data = self.api.post("/visits", data)
         return Visit.from_api(visit_data)
 
-    def get_doctor_schedule(self, doctor_id, date):
+    def get_doctor_schedule(self, doctor_id, date, branch_id):
         params = {
             "doctor_id": doctor_id,
             "date_from": date,
             "date_to": date,
-            'branch_id': '7876'
+            'branch_id': branch_id
         }
 
         return self.api.get("/schedule", params=params)
@@ -37,8 +37,8 @@ class VisitService:
         }
         return self.api.get("/visits", params=params)["data"]
 
-    def find_free_slots(self, doctor_id, date, slot_minutes=30):
-        schedule = self.get_doctor_schedule(doctor_id, date)
+    def find_free_slots(self, doctor_id, date, branch_id, slot_minutes=30):
+        schedule = self.get_doctor_schedule(doctor_id, date, branch_id)
 
         intervals = []
         for s in schedule:
