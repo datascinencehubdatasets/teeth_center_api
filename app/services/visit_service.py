@@ -22,8 +22,10 @@ class VisitService:
         params = {
             "doctor_id": doctor_id,
             "date_from": date,
-            "date_to": date
+            "date_to": date,
+            'branch_id': '7876'
         }
+
         return self.api.get("/schedule", params=params)
 
     def get_doctor_visits(self, doctor_id, date):
@@ -37,10 +39,6 @@ class VisitService:
 
     def find_free_slots(self, doctor_id, date, slot_minutes=30):
         schedule = self.get_doctor_schedule(doctor_id, date)
-        # Array of all available branches
-        available_branches = [7876]  # Currently we only work with this branch
-        schedule = [s for s in schedule if s["branch_id"]
-                    in available_branches]
 
         intervals = []
         for s in schedule:
