@@ -93,12 +93,14 @@ def doctor_free_slots(
     doctor_id: int = Query(..., description="ID доктора"),
     date: str = Query(..., description="Дата в формате YYYY-MM-DD"),
     slot_size: int = Query(
-        30, description="Размер слота в минутах (по умолчанию 30)")
+        30, description="Размер слота в минутах (по умолчанию 30)"),
+    branch_id: int = Query(..., description="ID филиала")
 ):
     try:
         # Проверяем существование доктора перед поиском слотов
         doctor_service.get(doctor_id)
-        slots = visit_service.find_free_slots(doctor_id, date, slot_size)
+        slots = visit_service.find_free_slots(
+            doctor_id, date, branch_id, slot_minutes=slot_size)
         return {"doctor_id": doctor_id, "date": date, "slot_size": slot_size, "free_slots": slots}
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 404:
